@@ -1,46 +1,64 @@
 import cv2
+import logging
 from deepface import DeepFace
 
-# Inicializa a webcam (0 = câmera padrão)
+# ========== CONFIGURAÇÃO DO LOG ========== #
+log_filename = "log_analise_facial.log"
+with open(log_filename, "w"):  # Limpa o arquivo a cada execução
+    pass
+
+logging.basicConfig(
+    filename=log_filename,
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+# ========== DETECTOR DE ROSTO DO OPENCV PARA DEBUG ========== #
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+# ========== INICIALIZA A CÂMERA ========== #
 cap = cv2.VideoCapture(0)
+
+if not cap.isOpened():
+    logging.error("Não foi possível abrir a câmera.")
+    print("Erro: Não foi possível abrir a câmera.")
+    exit()
 
 print("Pressione 'q' para sair.")
 
+# ========== LOOP PRINCIPAL ========== #
 while True:
     ret, frame = cap.read()
     if not ret:
-        print("Erro ao acessar a webcam.")
-        break
+        logging.warning("Falha ao capturar frame da webcam.")
+        continue
 
-    # Reduz o tamanho da imagem para melhorar o desempenho
-    resized_frame = cv2.resize(frame, (640, 480))
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
 
-    try:
-        # Analisa a face na imagem capturada
-        results = DeepFace.analyze(resized_frame,
-                                   actions=['age', 'gender', 'emotion'],
-                                   enforce_detection=False)
+    if len(faces) == 0:
+        msg = "Nenhum rosto detectado com HaarCascade."
+        print(msg)
+        logging.info(msg)
+    else:
+        try:
+            result = DeepFace.analyze(
+                frame,
+                actions=['gender', 'age', 'emotion'],
+                enforce_detection=True
+            )
+            logging.info(f"Resultado: {result}")
+            print(f"Análise: {result[0] if isinstance(result, list) else result}")
+        except Exception as e:
+            msg = f"DeepFace não conseguiu analisar: {str(e)}"
+            print(msg)
+            logging.error(msg)
 
-        # Extrai os dados do resultado
-        age = results[0]['age']
-        gender = results[0]['gender']
-        emotion = results[0]['dominant_emotion']
-
-        # Escreve as informações na tela da webcam
-        text = f"Idade: {age} | Gênero: {gender} | Emoção: {emotion}"
-        cv2.putText(resized_frame, text, (10, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-
-    except Exception as e:
-        print("Erro na análise facial:", e)
-
-    # Exibe o vídeo com overlay
-    cv2.imshow("Análise Facial com IA - Pressione 'q' para sair", resized_frame)
-
-    # Sai ao pressionar 'q'
+    cv2.imshow("Webcam", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-# Libera a câmera e fecha a janela
+# ========== FINALIZA ========== #
 cap.release()
 cv2.destroyAllWindows()
+logging.info("Encerrado com sucesso.")
