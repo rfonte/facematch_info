@@ -31,7 +31,6 @@ facematch_info/
 0. Crie o ambiente virtual:
     py -3.10 -m venv venv_deepface
     venv_deepface\Scripts\activate
-
 1. Clone o repositório:
     git clone https://github.com/seu-usuario/facematch_info.git
     cd facematch_info
@@ -51,6 +50,16 @@ OpenCV - https://opencv.org/
 DeepFace - https://github.com/serengil/deepface
 Python 3.8+ - https://www.python.org/
 pytest - https://docs.pytest.org/en/7.2.x/
+
+Biblioteca - Finalidade no Projeto
+opencv-python	Usada para capturar e manipular imagens da webcam em tempo real, além de desenhar retângulos e textos no frame.
+deepface	Framework de análise facial baseado em deep learning. Permite detectar idade, gênero, emoção e identidade de um rosto.
+tensorflow	Back-end principal para rodar os modelos de deep learning utilizados pelo DeepFace.
+numpy	Usada para manipulação de arrays e imagens, com desempenho otimizado.
+pandas	Organiza e estrutura os dados de análise facial, facilitando o armazenamento futuro em bases ou arquivos.
+matplotlib	Pode ser usada para gerar gráficos com base nos dados de análise facial, como histórico de emoções, por exemplo.
+Flask	Microframework para criar APIs REST que expõem os dados analisados, permitindo integração com dashboards ou outras aplicações.
+Flask-Cors	Permite o acesso da API Flask a partir de páginas web (como um dashboard React, Angular etc.), habilitando o Cross-Origin Resource Sharing.
 
 📄 Licença
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
