@@ -41,6 +41,8 @@ facematch_info/
     pip install -r requirements.txt
 4. Execute o sistema:
     python main.py
+5. Gerar documentação
+    pdoc -o docs src
 
 🧪 Como Executar os Testes
     pytest tests/
