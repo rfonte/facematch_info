@@ -81,6 +81,15 @@ logger = setup_logger("logs/app.log", rotation="time", when="midnight", interval
 logger = setup_logger("logs/app.log", rotation="size", max_bytes=5*1024*1024, backup_count=5)
 ```
 
+Nota sobre diretórios diários:
+
+Por padrão, quando você usa o diretório `logs/` o logger cria automaticamente uma subpasta por dia no formato `logs/YYYY-MM-DD` e grava o(s) arquivo(s) de log daquele dia dentro dela. Exemplo mínimo:
+
+```python
+# comportamento padrão: cria logs/2025-12-15/log_analise_facial.log
+logger = setup_logger()  # equivalente a setup_logger('logs/log_analise_facial.log')
+```
+
 **Boas Práticas / Observações**
 - Modelos DeepFace podem baixar pesos na primeira execução — aguarde a inicialização.
 - Em máquinas sem GPU, a inicialização pode demorar bastante; considere usar uma máquina com GPU ou um runtime em nuvem para testes pesados.
