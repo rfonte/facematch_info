@@ -1,67 +1,90 @@
-📸 FaceMatch Info – Análise Facial com DeepFace e OpenCV
-Este projeto realiza detecção de rostos em tempo real via webcam, usando OpenCV e analisa características como idade, gênero e emoção dominante com DeepFace. O resultado é exibido na tela com um retângulo ao redor do rosto e informações sobre a pessoa detectada.
+**FaceMatch Info — Análise Facial (DeepFace + OpenCV)**
 
-🧠 Funcionalidades
-📷 Captura de vídeo em tempo real via webcam
+Projeto para detecção e análise facial em tempo real via webcam. Usa OpenCV para captura e detecção de faces e DeepFace para análise de atributos como idade, gênero e emoção dominante. Resultados são sobrepostos no vídeo e gravados em log para auditoria.
 
-😎 Detecção de rostos com HaarCascade (OpenCV)
+**Principais Funcionalidades**
+- **Captura:** Vídeo em tempo real via webcam.
+- **Detecção:** Faces detectadas com HaarCascade / OpenCV.
+- **Análise:** Predição de idade, gênero e emoção com DeepFace.
+- **Overlay:** Exibição de retângulo e informações sobre o frame.
+- **Logging:** Registros das análises salvos em arquivo.
+- **Testes:** Testes básicos com `pytest`.
 
-🤖 Análise facial com DeepFace (idade, gênero, emoção)
+**Estrutura do Projeto**
+- [main.py](main.py) — Ponto de entrada da aplicação.
+- [src/](src/) — Código fonte do projeto:
+  - [src/logger_config.py](src/logger_config.py) — Configuração do logging.
+  - [src/face_detector.py](src/face_detector.py) — Detecção de faces (OpenCV).
+  - [src/facial_analysis.py](src/facial_analysis.py) — Integração com DeepFace.
+- [models/](models/) — Modelos e pesos (não versionados aqui).
+- [tests/](tests/) — Testes unitários (`pytest`).
+- [requirements.txt](requirements.txt) — Dependências do projeto.
+- [LICENSE](LICENSE) — Licença MIT.
 
-🖼️ Sobreposição de dados diretamente no frame da câmera
+**Pré-requisitos**
+- Python 3.10 (recomendado).
+- GPU compatível (opcional) para acelerar DeepFace/TensorFlow.
 
-📝 Log completo das análises salvas em arquivo
+No Windows, comandos de exemplo:
 
-✅ Estrutura modular com testes automatizados
+```powershell
+py -3.10 -m venv venv_deepface
+venv_deepface\Scripts\Activate.ps1  # PowerShell
+pip install -r requirements.txt
+```
 
-🗂️ Estrutura de Diretórios
+**Como Executar**
+1. Ative o ambiente virtual (veja acima).
+2. Ajuste a câmera padrão se necessário (configuração no `main.py`).
+3. Execute:
 
-facematch_info/
-├── main.py                     # Ponto de entrada da aplicação
-├── src/
-│   ├── logger_config.py        # Configuração do sistema de log
-│   ├── face_detector.py        # Módulo de detecção de rostos
-│   └── facial_analysis.py      # Módulo de análise com DeepFace
-├── tests/
-│   └── test_face_modules.py    # Testes unitários básicos
-├── log_analise_facial.log      # Arquivo de log da sessão atual
-└── requirements.txt            # Lista de dependências
+```powershell
+python main.py
+```
 
-▶️ Como Executar
-0. Crie o ambiente virtual:
-    py -3.10 -m venv venv_deepface
-    venv_deepface\Scripts\activate
-1. Clone o repositório:
-    git clone https://github.com/seu-usuario/facematch_info.git
-    cd facematch_info
-2. Crie o ambiente virtual e ative:
-    py -3.10 -m venv venv_deepface
-    venv\Scripts\activate  # No Windows
-3. Instale as dependências:
-    pip install -r requirements.txt
-4. Execute o sistema:
-    python main.py
-5. Gerar documentação
-    pdoc -o docs src
+Ao iniciar, uma janela com o feed da webcam será aberta. Faces detectadas terão um retângulo e texto com as predições.
 
-🧪 Como Executar os Testes
-    pytest tests/
+**Testes**
+Executar a suíte de testes com `pytest`:
 
-🛠️ Tecnologias Utilizadas
-OpenCV - https://opencv.org/
-DeepFace - https://github.com/serengil/deepface
-Python 3.8+ - https://www.python.org/
-pytest - https://docs.pytest.org/en/7.2.x/
+```powershell
+pytest tests/
+```
 
-Biblioteca - Finalidade no Projeto
-opencv-python	Usada para capturar e manipular imagens da webcam em tempo real, além de desenhar retângulos e textos no frame.
-deepface	Framework de análise facial baseado em deep learning. Permite detectar idade, gênero, emoção e identidade de um rosto.
-tensorflow	Back-end principal para rodar os modelos de deep learning utilizados pelo DeepFace.
-numpy	Usada para manipulação de arrays e imagens, com desempenho otimizado.
-pandas	Organiza e estrutura os dados de análise facial, facilitando o armazenamento futuro em bases ou arquivos.
-matplotlib	Pode ser usada para gerar gráficos com base nos dados de análise facial, como histórico de emoções, por exemplo.
-Flask	Microframework para criar APIs REST que expõem os dados analisados, permitindo integração com dashboards ou outras aplicações.
-Flask-Cors	Permite o acesso da API Flask a partir de páginas web (como um dashboard React, Angular etc.), habilitando o Cross-Origin Resource Sharing.
+**Geração de Documentação**
+Se desejar gerar documentação HTML (requer `pdoc`):
 
-📄 Licença
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+```powershell
+pip install pdoc
+pdoc --output-dir docs src
+```
+
+**Configuração e Logs**
+- Arquivo de configuração de logs: [src/logger_config.py](src/logger_config.py).
+- O log de execução padrão é gravado em `log_analise_facial.log` no diretório do projeto.
+
+**Boas Práticas / Observações**
+- Modelos DeepFace podem baixar pesos na primeira execução — aguarde a inicialização.
+- Em máquinas sem GPU, a inicialização pode demorar bastante; considere usar uma máquina com GPU ou um runtime em nuvem para testes pesados.
+- Para melhorar performance em tempo real, reduza a resolução do frame antes da análise.
+
+**Possíveis Problemas e Soluções**
+- Erro de importação do `cv2`: verifique se `opencv-python` está instalado no ambiente ativo.
+- Erros de versão TensorFlow/DeepFace: use as versões listadas em `requirements.txt` do projeto ou crie um ambiente isolado com as versões compatíveis.
+
+**Contribuindo**
+Pull requests são bem-vindos. Para contribuir:
+
+1. Fork do repositório.
+2. Crie uma branch com a feature/bugfix.
+3. Abra um PR descrevendo as mudanças e testes realizados.
+
+**Licença**
+Projeto licenciado sob MIT — veja [LICENSE](LICENSE).
+
+**Contato / Referências**
+- DeepFace: https://github.com/serengil/deepface
+- OpenCV: https://opencv.org/
+
+--
+Atualizado para fornecer instruções claras de uso, testes, geração de docs, deploy local e contribuições.
