@@ -6,7 +6,7 @@ from typing import Optional
 
 
 def setup_logger(
-    log_filename: str = "log_analise_facial.log",
+    log_filename: str = os.path.join("logs", "log_analise_facial.log"),
     level: Optional[int] = None,
     rotation: str = "time",  # 'size' or 'time' (default: time-based rotation)
     max_bytes: int = 5 * 1024 * 1024,

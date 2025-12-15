@@ -63,7 +63,7 @@ pdoc --output-dir docs src
 
 **Configuração e Logs**
 - Arquivo de configuração de logs: [src/logger_config.py](src/logger_config.py).
-- O log de execução padrão é gravado em `log_analise_facial.log` no diretório do projeto.
+- O log de execução padrão é gravado em `logs/log_analise_facial.log` (diretório `logs/`).
 
 Logs e rotação
 - O logger usa rotação por tempo por padrão (`TimedRotatingFileHandler`, rotações a cada `midnight`),
