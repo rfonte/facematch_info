@@ -29,10 +29,26 @@ def setup_logger(
         except Exception:
             level = logging.INFO
 
-    # Ensure directory exists
-    log_dir = os.path.dirname(os.path.abspath(log_filename))
-    if log_dir and not os.path.exists(log_dir):
-        os.makedirs(log_dir, exist_ok=True)
+    # Ensure directory exists (top-level logs folder)
+    base_log_dir = os.path.dirname(os.path.abspath(log_filename))
+    if base_log_dir and not os.path.exists(base_log_dir):
+        os.makedirs(base_log_dir, exist_ok=True)
+
+    # Create a daily subdirectory under the base logs directory only when the base dir is 'logs'
+    try:
+        from datetime import datetime
+
+        if os.path.basename(os.path.normpath(base_log_dir)).lower() == "logs":
+            today = datetime.now().strftime("%Y-%m-%d")
+            daily_dir = os.path.join(base_log_dir, today)
+            os.makedirs(daily_dir, exist_ok=True)
+            # update log_filename to point inside the daily directory
+            log_filename = os.path.join(daily_dir, os.path.basename(log_filename))
+            log_dir = daily_dir
+        else:
+            log_dir = base_log_dir
+    except Exception:
+        log_dir = base_log_dir
 
     # Move existing top-level log files into the logs directory (if any)
     try:
