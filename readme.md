@@ -1,3 +1,5 @@
+[![Coverage](https://codecov.io/gh/rfonte/facematch_info/branch/main/graph/badge.svg)](https://codecov.io/gh/rfonte/facematch_info)
+
 **FaceMatch Info — Análise Facial (DeepFace + OpenCV)**
 
 Projeto para detecção e análise facial em tempo real via webcam. Usa OpenCV para captura e detecção de faces e DeepFace para análise de atributos como idade, gênero e emoção dominante. Resultados são sobrepostos no vídeo e gravados em log para auditoria.
