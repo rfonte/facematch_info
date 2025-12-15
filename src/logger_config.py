@@ -1,6 +1,8 @@
 # src/logger_config.py
 import logging
 import os
+import shutil
+from pathlib import Path
 from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
 from typing import Optional
 
@@ -31,6 +33,30 @@ def setup_logger(
     log_dir = os.path.dirname(os.path.abspath(log_filename))
     if log_dir and not os.path.exists(log_dir):
         os.makedirs(log_dir, exist_ok=True)
+
+    # Move existing top-level log files into the logs directory (if any)
+    try:
+        repo_root = Path(__file__).resolve().parents[1]
+        base_name = Path(log_filename).name
+        # look for files in repo root that start with the base name (e.g., log_analise_facial.log, log_analise_facial.log.2025-...)
+        for p in repo_root.iterdir():
+            if p.is_file() and p.name.startswith(base_name) and Path(log_dir).resolve() not in p.resolve().parents:
+                dest = Path(log_dir) / p.name
+                # avoid overwriting existing file in logs/; add numeric suffix if necessary
+                if dest.exists():
+                    stem = dest.stem
+                    suffix = dest.suffix
+                    i = 1
+                    while True:
+                        candidate = Path(log_dir) / f"{stem}.{i}{suffix}"
+                        if not candidate.exists():
+                            dest = candidate
+                            break
+                        i += 1
+                shutil.move(str(p), str(dest))
+    except Exception:
+        # moving logs should not prevent logger setup; ignore errors
+        pass
 
     logger = logging.getLogger("facematch_info")
     logger.setLevel(level)
