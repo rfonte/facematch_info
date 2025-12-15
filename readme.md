@@ -65,6 +65,22 @@ pdoc --output-dir docs src
 - Arquivo de configuração de logs: [src/logger_config.py](src/logger_config.py).
 - O log de execução padrão é gravado em `log_analise_facial.log` no diretório do projeto.
 
+Logs e rotação
+- O logger usa rotação por tempo por padrão (`TimedRotatingFileHandler`, rotações a cada `midnight`),
+  mantendo por padrão `backup_count=7` arquivos antigos. É possível configurar para rotação por tamanho.
+
+Exemplos de uso do `setup_logger` (em `src/logger_config.py`):
+
+```python
+from src.logger_config import setup_logger
+
+# Time-based rotation (padrão): rotaciona diariamente e mantém 7 arquivos
+logger = setup_logger("logs/app.log", rotation="time", when="midnight", interval=1, backup_count=7)
+
+# Size-based rotation: rotaciona ao atingir 5MB e mantém 5 backups
+logger = setup_logger("logs/app.log", rotation="size", max_bytes=5*1024*1024, backup_count=5)
+```
+
 **Boas Práticas / Observações**
 - Modelos DeepFace podem baixar pesos na primeira execução — aguarde a inicialização.
 - Em máquinas sem GPU, a inicialização pode demorar bastante; considere usar uma máquina com GPU ou um runtime em nuvem para testes pesados.
