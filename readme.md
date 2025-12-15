@@ -44,6 +44,30 @@ pip install -r requirements.txt
 python main.py
 ```
 
+**CLI (execução via script)**
+
+Também é possível executar a aplicação via o utilitário CLI em `scripts/run.py`:
+
+- Uso básico (abre GUI):
+
+```powershell
+python -m scripts.run
+```
+
+- Opções importantes:
+  - `--camera <index>`: índice da câmera para `cv2.VideoCapture` (padrão: `0`).
+  - `--no-gui`: desabilita a exibição da janela (útil em servidores/headless).
+  - `--log-file <path>`: caminho opcional para arquivo de log.
+
+Exemplos:
+
+```powershell
+python -m scripts.run --camera 1 --log-file logs/app.log
+python -m scripts.run --no-gui --log-file logs/app.log
+```
+
+O comportamento do `python main.py` permanece compatível e delega para `src.cli.main()`.
+
 Ao iniciar, uma janela com o feed da webcam será aberta. Faces detectadas terão um retângulo e texto com as predições.
 
 **Testes**
