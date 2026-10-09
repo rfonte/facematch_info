@@ -1,5 +1,5 @@
 numpy==1.24.4
 opencv-python==4.8.0.74
-tensorflow==2.11.0
+tensorflow==2.12.1
 deepface==0.0.75
 pytest>=7.0.0
